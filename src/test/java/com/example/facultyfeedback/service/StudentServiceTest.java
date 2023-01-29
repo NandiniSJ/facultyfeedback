@@ -25,11 +25,11 @@ class StudentServiceTest {
     @Test
     void shouldReturnAllStudents() {
         Student student = new Student(1L, "Nandini", "Jadhav", "12", null);
-        StudentDTO studentDTO = new StudentDTO(1L, "Nandini", "Jadhav", "12");
         Mockito.when(studentRepository.findAll()).thenReturn(List.of(student));
 
         final List<StudentDTO> students = studentService.getStudents();
 
-        assertEquals(List.of(studentDTO), students);
+        StudentDTO expected = new StudentDTO(1L, "Nandini", "Jadhav", "12");
+        assertEquals(List.of(expected), students);
     }
 }
