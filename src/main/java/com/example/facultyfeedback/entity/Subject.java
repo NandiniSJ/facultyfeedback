@@ -15,7 +15,7 @@ public class Subject {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="semester_id", nullable=false)
+    @JoinColumn(name="semester_id")
     private Semester semester;
     private String name;
 

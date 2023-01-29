@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SemesterService {
@@ -22,13 +23,15 @@ public class SemesterService {
     public List<SemesterDTO> getSemester(){
        List<Semester> semesters = semesterRepository.findAll();
 
-       List<SemesterDTO> semesterDTOS = new ArrayList<>();
+//       List<SemesterDTO> semesterDTOS = new ArrayList<>();
 
-        for (int i = 0; i < semesters.size(); i++) {
-            Semester semester = semesters.get(i);
-            semesterDTOS.add(new SemesterDTO(semester.getId(), semester.getNumber()));
-        }
+//        for (int i = 0; i < semesters.size(); i++) {
+//            Semester semester = semesters.get(i);
+//            semesterDTOS.add(new SemesterDTO(semester.getId(), semester.getNumber()));
+//        }
 
-        return semesterDTOS;
+        return semesters.stream()
+                .map(semester ->new SemesterDTO(semester.getId(), semester.getNumber()))
+                .collect(Collectors.toList());
    }
 }

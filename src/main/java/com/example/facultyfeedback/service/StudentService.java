@@ -22,15 +22,15 @@ public class StudentService {
 
     public List<StudentDTO> getStudents(){
         final List<Student> students = studentRepository.findAll();
-        List<StudentDTO> studentDTOS = new ArrayList<>();
-        for (int i = 0; i < students.size(); i++) {
-            final Student student = students.get(i);
-            studentDTOS.add(new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getRollNum()));
-        }
+//        List<StudentDTO> studentDTOS = new ArrayList<>();
+//        for (int i = 0; i < students.size(); i++) {
+//            final Student student = students.get(i);
+//            studentDTOS.add(new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getRollNum()));
+//        }
 
-//        return students.stream()
-//                .map(student -> new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getRollNum()))
-//                .collect(Collectors.toList());
-        return studentDTOS;
+        return students.stream()
+                .map(student -> new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getRollNum()))
+                .collect(Collectors.toList());
+//        return studentDTOS;
     }
 }
