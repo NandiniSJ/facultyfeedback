@@ -1,12 +1,13 @@
 package com.example.facultyfeedback.service;
 
+import com.example.facultyfeedback.entity.Semester;
 import com.example.facultyfeedback.entity.Subject;
 import com.example.facultyfeedback.model.SubjectDTO;
+import com.example.facultyfeedback.model.request.SubjectRequest;
 import com.example.facultyfeedback.repositories.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,10 +15,12 @@ import java.util.stream.Collectors;
 public class SubjectService {
 
     private SubjectRepository subjectRepository;
+    private SemesterService semesterService;
 
     @Autowired
-    public SubjectService(SubjectRepository subjectRepository) {
+    public SubjectService(SubjectRepository subjectRepository, SemesterService semesterService) {
         this.subjectRepository = subjectRepository;
+        this.semesterService = semesterService;
     }
 
     public List<SubjectDTO> getSubjects(){
@@ -32,5 +35,13 @@ public class SubjectService {
         return subjects.stream()
                 .map(subject -> new SubjectDTO(subject.getId(), subject.getName()))
                 .collect(Collectors.toList());
+    }
+
+    public SubjectDTO save(SubjectRequest subjectRequest){
+        final Semester semester = semesterService.findById(subjectRequest.getSemesterId());
+        Subject subject = new Subject(null, semester, subjectRequest.getName());
+        final Subject savedSubject = subjectRepository.saveAndFlush(subject);
+        return new SubjectDTO(savedSubject.getId(),savedSubject.getName());
+
     }
 }

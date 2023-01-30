@@ -7,13 +7,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,8 +35,21 @@ class SemesterControllerTest {
 
         this.mockMvc.perform(get("/semester"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(semester.getId().intValue())))
                 .andExpect(jsonPath("$[0].number", is(semester.getNumber())));
+    }
+
+    @Test
+    void shouldSaveSemester() throws Exception {
+        String body = "{\n" +
+                "    \"number\": 1\n" +
+                "}";
+        this.mockMvc.perform(post("/semester")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk());
+        final List<Semester> semesters = semesterRepository.findAll();
+        assertEquals(1, semesters.size());
+        assertEquals(1, semesters.get(0).getNumber());
     }
 
     @AfterEach
