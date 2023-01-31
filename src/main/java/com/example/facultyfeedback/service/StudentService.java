@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.facultyfeedback.entity.Semester;
 import com.example.facultyfeedback.entity.Student;
 import com.example.facultyfeedback.model.StudentDTO;
+import com.example.facultyfeedback.model.request.StudentRequest;
 import com.example.facultyfeedback.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,12 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
+    private SemesterService semesterService;
+
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, SemesterService semesterService) {
         this.studentRepository = studentRepository;
+        this.semesterService = semesterService;
     }
 
     public List<StudentDTO> getStudents(){
@@ -32,5 +37,12 @@ public class StudentService {
                 .map(student -> new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getRollNum()))
                 .collect(Collectors.toList());
 //        return studentDTOS;
+    }
+
+    public StudentDTO save(StudentRequest studentRequest){
+        final Semester semester = semesterService.findById(studentRequest.getSemesterId());
+        Student student = new Student(null,studentRequest.getFirstName(),studentRequest.getLastName(),studentRequest.getRollNum(),semester);
+        Student savedStudent = studentRepository.saveAndFlush(student);
+        return new StudentDTO(savedStudent.getId(), savedStudent.getFirstName(), savedStudent.getLastName(), savedStudent.getRollNum());
     }
 }
