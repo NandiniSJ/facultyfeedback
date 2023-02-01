@@ -18,6 +18,9 @@ public class Subject {
     @JoinColumn(name="semester_id")
     private Semester semester;
     private String name;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 
 
 }

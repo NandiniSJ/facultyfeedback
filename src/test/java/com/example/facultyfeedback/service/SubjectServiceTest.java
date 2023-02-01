@@ -27,7 +27,7 @@ class SubjectServiceTest {
 
     @Test
     void shouldReturnListOfAllSubjects() {
-        Subject subject = new Subject(1L, null, "Maths");
+        Subject subject = new Subject(1L, null, "Maths", null);
         Mockito.when(subjectRepository.findAll()).thenReturn(List.of(subject));
 
         final List<SubjectDTO> subjects = subjectService.getSubjects();
@@ -41,7 +41,7 @@ class SubjectServiceTest {
         SubjectRequest subjectRequest = new SubjectRequest("Maths", 1L);
         Semester semester = new Semester(1L, 1, null);
         Mockito.when(semesterService.findById(1L)).thenReturn(semester);
-        Subject subject = new Subject(1L, semester, "Maths");
+        Subject subject = new Subject(1L, semester, "Maths", null);
         Mockito.when(subjectRepository.saveAndFlush(Mockito.any())).thenReturn(subject);
 
         final SubjectDTO subjectDTO = subjectService.save(subjectRequest);

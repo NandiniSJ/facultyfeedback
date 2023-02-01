@@ -36,7 +36,7 @@ class SubjectControllerTest {
 
     @Test
     void shouldReturnListOfAllSubjects() throws Exception {
-        Subject subject = new Subject(1L, null, "Maths");
+        Subject subject = new Subject(1L, null, "Maths",null);
         subjectRepository.save(subject);
 
         this.mockMvc.perform(get("/subject"))

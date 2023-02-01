@@ -39,7 +39,7 @@ public class SubjectService {
 
     public SubjectDTO save(SubjectRequest subjectRequest){
         final Semester semester = semesterService.findById(subjectRequest.getSemesterId());
-        Subject subject = new Subject(null, semester, subjectRequest.getName());
+        Subject subject = new Subject(null, semester, subjectRequest.getName(),null);
         final Subject savedSubject = subjectRepository.saveAndFlush(subject);
         return new SubjectDTO(savedSubject.getId(),savedSubject.getName());
 
