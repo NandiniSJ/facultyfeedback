@@ -23,9 +23,13 @@ public class SubjectService {
         this.semesterService = semesterService;
     }
 
-    public List<SubjectDTO> getSubjects(){
-        final List<Subject> subjects = subjectRepository.findAll();
-
+    public List<SubjectDTO> getSubjects(Long teacherId){
+        final List<Subject> subjects;
+        if(teacherId != null) {
+            subjects = subjectRepository.findAllByTeacherId(teacherId);
+        }else{
+            subjects = subjectRepository.findAll();
+        }
 //        List<SubjectDTO> subjectDTOS = new ArrayList<>();
 //        for (int i = 0; i < subjects.size(); i++) {
 //            final Subject subject = subjects.get(i);

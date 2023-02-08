@@ -17,6 +17,8 @@ public class Teacher {
     private Long id;
     private String firstName;
     private String lastname;
+    private String department;
+
     @OneToMany(mappedBy = "teacher")
     private List<Subject> subjects;
 

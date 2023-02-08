@@ -2,6 +2,7 @@ package com.example.facultyfeedback.service;
 
 import com.example.facultyfeedback.entity.Semester;
 import com.example.facultyfeedback.entity.Subject;
+import com.example.facultyfeedback.model.StudentDTO;
 import com.example.facultyfeedback.model.SubjectDTO;
 import com.example.facultyfeedback.model.request.SubjectRequest;
 import com.example.facultyfeedback.repositories.SubjectRepository;
@@ -30,10 +31,23 @@ class SubjectServiceTest {
         Subject subject = new Subject(1L, null, "Maths", null);
         Mockito.when(subjectRepository.findAll()).thenReturn(List.of(subject));
 
-        final List<SubjectDTO> subjects = subjectService.getSubjects();
+        final List<SubjectDTO> subjects = subjectService.getSubjects(null);
 
         SubjectDTO expected = new SubjectDTO(1L, "Maths");
         assertEquals(List.of(expected),subjects);
+    }
+
+    @Test
+    void shouldGetAllSubjectsByTeacherId(){
+        Subject subject = new Subject(1L,null,"SOM", null);
+        Mockito.when(subjectRepository.findAllByTeacherId(1L)).thenReturn(List.of(subject));
+
+        List<SubjectDTO> subjects = subjectService.getSubjects(1L);
+
+        assertEquals(1, subjects.size());
+        SubjectDTO expected = new SubjectDTO(1L,"SOM");
+        assertEquals(expected,subjects.get(0));
+
     }
 
     @Test

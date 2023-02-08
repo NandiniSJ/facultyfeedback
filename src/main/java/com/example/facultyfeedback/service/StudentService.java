@@ -34,15 +34,15 @@ public class StudentService {
 //        }
 
         return students.stream()
-                .map(student -> new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getRollNum()))
+                .map(student -> new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getRollNum(), student.getDepartment()))
                 .collect(Collectors.toList());
 //        return studentDTOS;
     }
 
     public StudentDTO save(StudentRequest studentRequest){
         final Semester semester = semesterService.findById(studentRequest.getSemesterId());
-        Student student = new Student(null,studentRequest.getFirstName(),studentRequest.getLastName(),studentRequest.getRollNum(),semester);
+        Student student = new Student(null,studentRequest.getFirstName(),studentRequest.getLastName(),studentRequest.getRollNum(),studentRequest.getDepartment(),semester);
         Student savedStudent = studentRepository.saveAndFlush(student);
-        return new StudentDTO(savedStudent.getId(), savedStudent.getFirstName(), savedStudent.getLastName(), savedStudent.getRollNum());
+        return new StudentDTO(savedStudent.getId(), savedStudent.getFirstName(), savedStudent.getLastName(), savedStudent.getRollNum(),savedStudent.getDepartment());
     }
 }

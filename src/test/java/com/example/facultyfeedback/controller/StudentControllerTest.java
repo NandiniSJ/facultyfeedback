@@ -37,15 +37,16 @@ class StudentControllerTest {
 
     @Test
     void shouldReturnListOfStudents() throws Exception {
-        Student student = new Student(1L, "Nandini", "Jadhav", "12", null);
+        Student student = new Student(1L, "Nandini", "Jadhav", "12","civil", null);
         studentRepository.save(student);
 
         this.mockMvc.perform(get("/student"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(student.getId().intValue())))
                 .andExpect(jsonPath("$[0].firstName", is(student.getFirstName())))
                 .andExpect(jsonPath("$[0].lastName", is(student.getLastName())))
-                .andExpect(jsonPath("$[0].rollNum", is(student.getRollNum())));
+                .andExpect(jsonPath("$[0].rollNum", is(student.getRollNum())))
+                .andExpect(jsonPath("$[0].department", is(student.getDepartment())));
+
     }
 
 
@@ -58,6 +59,7 @@ class StudentControllerTest {
                 "   \"firstName\": \"Nandini\",\n" +
                 "   \"lastName\": \"Jadhav\",\n" +
                 "   \"rollNum\": \"12\",\n" +
+                "   \"department\": \"civil\",\n" +
                 "   \"semesterId\": "+savedSemester.getId() +"\n" +
                 "}";
         this.mockMvc.perform(post("/student")
@@ -71,6 +73,7 @@ class StudentControllerTest {
         assertEquals("Nandini", students.get(0).getFirstName());
         assertEquals("Jadhav", students.get(0).getLastName());
         assertEquals("12", students.get(0).getRollNum());
+        assertEquals("civil", students.get(0).getDepartment());
 
     }
 

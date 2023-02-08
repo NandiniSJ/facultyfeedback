@@ -29,26 +29,26 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnAllStudents() {
-        Student student = new Student(1L, "Nandini", "Jadhav", "12", null);
+        Student student = new Student(1L, "Nandini", "Jadhav", "12","civil", null);
         Mockito.when(studentRepository.findAll()).thenReturn(List.of(student));
 
         final List<StudentDTO> students = studentService.getStudents();
 
-        StudentDTO expected = new StudentDTO(1L, "Nandini", "Jadhav", "12");
+        StudentDTO expected = new StudentDTO(1L, "Nandini", "Jadhav", "12","civil");
         assertEquals(List.of(expected), students);
     }
 
     @Test
     void shouldSaveStudent() {
         Semester semester = new Semester(1L, 1, null);
-        StudentRequest studentRequest = new StudentRequest("Nandini", "Jadhav", "12", 1L);
+        StudentRequest studentRequest = new StudentRequest("Nandini", "Jadhav", "12", "civil",1L);
         Mockito.when(semesterService.findById(1L)).thenReturn(semester);
-        Student student = new Student(1L,"Nandini", "Jadhav", "12", semester);
+        Student student = new Student(1L,"Nandini", "Jadhav", "12", "civil",semester);
         Mockito.when(studentRepository.saveAndFlush(Mockito.any())).thenReturn(student);
 
         StudentDTO studentDTO = studentService.save(studentRequest);
 
-        StudentDTO expected = new StudentDTO(1L, "Nandini", "Jadhav", "12");
+        StudentDTO expected = new StudentDTO(1L, "Nandini", "Jadhav", "12","civil");
         assertEquals(expected, studentDTO);
 
     }
