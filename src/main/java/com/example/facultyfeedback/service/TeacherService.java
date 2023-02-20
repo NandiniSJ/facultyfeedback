@@ -36,4 +36,8 @@ public class TeacherService {
         Teacher savedTeacher = teacherRepository.saveAndFlush(teacher);
         return new TeacherDTO(savedTeacher.getId(),savedTeacher.getFirstName(), savedTeacher.getLastname(),savedTeacher.getDepartment());
     }
+
+    public Teacher findById(Long id) {
+        return teacherRepository.findById(id).get();
+    }
 }

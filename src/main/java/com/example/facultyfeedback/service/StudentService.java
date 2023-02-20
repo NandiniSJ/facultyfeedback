@@ -17,7 +17,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    private SemesterService semesterService;
+    private final SemesterService semesterService;
 
     @Autowired
     public StudentService(StudentRepository studentRepository, SemesterService semesterService) {
@@ -44,5 +44,9 @@ public class StudentService {
         Student student = new Student(null,studentRequest.getFirstName(),studentRequest.getLastName(),studentRequest.getRollNum(),studentRequest.getDepartment(),semester);
         Student savedStudent = studentRepository.saveAndFlush(student);
         return new StudentDTO(savedStudent.getId(), savedStudent.getFirstName(), savedStudent.getLastName(), savedStudent.getRollNum(),savedStudent.getDepartment());
+    }
+
+    public Student findById(Long id) {
+        return studentRepository.findById(id).get();
     }
 }
