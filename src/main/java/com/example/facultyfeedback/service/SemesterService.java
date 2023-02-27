@@ -6,8 +6,11 @@ import com.example.facultyfeedback.model.request.SemesterRequest;
 import com.example.facultyfeedback.repositories.SemesterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +45,10 @@ public class SemesterService {
     }
 
     public Semester findById(Long id){
-       return semesterRepository.findById(id).get();
+        Optional<Semester> optionalSemester = semesterRepository.findById(id);
+        if(optionalSemester.isPresent()){
+            return optionalSemester.get();
+        }
+        throw new RuntimeException("Semester with id " + id + " not found");
     }
 }

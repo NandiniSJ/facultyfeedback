@@ -2,9 +2,11 @@ package com.example.facultyfeedback.controller;
 
 import com.example.facultyfeedback.entity.Semester;
 import com.example.facultyfeedback.entity.Subject;
+import com.example.facultyfeedback.entity.User;
 import com.example.facultyfeedback.model.request.SemesterRequest;
 import com.example.facultyfeedback.repositories.SemesterRepository;
 import com.example.facultyfeedback.repositories.SubjectRepository;
+import com.example.facultyfeedback.repositories.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,6 +32,9 @@ class SubjectControllerTest {
     private SubjectRepository subjectRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private SemesterRepository semesterRepository;
 
     @Autowired
@@ -38,8 +44,10 @@ class SubjectControllerTest {
     void shouldReturnListOfAllSubjects() throws Exception {
         Subject subject = new Subject(1L, null, "Maths",null);
         subjectRepository.save(subject);
+        User user = new User(1L, "12","n@78880");
+        userRepository.save(user);
 
-        this.mockMvc.perform(get("/subject"))
+        this.mockMvc.perform(get("/subject").with(httpBasic("12","n@78880")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(subject.getId().intValue())))
                 .andExpect(jsonPath("$[0].name", is(subject.getName())));
@@ -47,16 +55,18 @@ class SubjectControllerTest {
 
     @Test
     void shouldSaveSubject() throws Exception {
+        Semester semester = new Semester(null, 1, null);
+        Semester savedSemester = semesterRepository.save(semester);
         String body = "{\n" +
                 "    \"name\": \"Maths\",\n" +
-                "    \"semesterId\":1\n" +
+                "    \"semesterId\":"+ savedSemester.getId() + "\n" +
                 " \n" +
                 "}";
 
-        Semester semester = new Semester(null, 1, null);
-        semesterRepository.save(semester);
+        User user = new User(1L, "12","n@78880");
+        userRepository.save(user);
 
-        this.mockMvc.perform(post("/subject")
+        this.mockMvc.perform(post("/subject").with(httpBasic("12","n@78880"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andExpect(status().isOk());
@@ -72,5 +82,6 @@ class SubjectControllerTest {
     @AfterEach
     void tearDown() {
         subjectRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

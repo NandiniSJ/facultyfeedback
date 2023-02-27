@@ -1,6 +1,5 @@
 package com.example.facultyfeedback.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,5 +47,10 @@ public class StudentService {
 
     public Student findById(Long id) {
         return studentRepository.findById(id).get();
+    }
+
+    public StudentDTO findByRollNum(String rollNum){
+        Student student = studentRepository.findByRollNum(rollNum);
+        return new StudentDTO(student.getId(),student.getFirstName(),student.getLastName(),student.getRollNum(),student.getDepartment());
     }
 }

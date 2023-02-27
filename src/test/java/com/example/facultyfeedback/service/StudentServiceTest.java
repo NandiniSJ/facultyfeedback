@@ -52,4 +52,17 @@ class StudentServiceTest {
         assertEquals(expected, studentDTO);
 
     }
+
+    @Test
+    void shouldReturnStudentByRollNum(){
+        Student student = new Student(1L,"Nandini","Jadhav","12", "Civil",null);
+        Mockito.when(studentRepository.findByRollNum(student.getRollNum())).thenReturn(student);
+
+        StudentDTO studentDTO = studentService.findByRollNum(student.getRollNum());
+
+        assertEquals(studentDTO.getFirstName(), "Nandini");
+        assertEquals(studentDTO.getLastName(), "Jadhav");
+        assertEquals(studentDTO.getDepartment(), "Civil");
+        assertEquals(studentDTO.getRollNum(), "12");
+    }
 }
